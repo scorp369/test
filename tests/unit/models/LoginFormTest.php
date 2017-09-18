@@ -2,10 +2,13 @@
 
 namespace tests\models;
 
-use app\models\LoginForm;
-use Codeception\Specify;
+use app\modules\user\forms\UserLoginForm;
+use Codeception\Test\Unit;
 
-class LoginFormTest extends \Codeception\Test\Unit
+/**
+ * тест формы аутентификации
+ */
+class LoginFormTest extends Unit
 {
     private $model;
 
@@ -16,8 +19,8 @@ class LoginFormTest extends \Codeception\Test\Unit
 
     public function testLoginNoUser()
     {
-        $this->model = new LoginForm([
-            'username' => 'not_existing_username',
+        $this->model = new UserLoginForm([
+            'login'    => 'not_existing_username',
             'password' => 'not_existing_password',
         ]);
 
@@ -27,8 +30,8 @@ class LoginFormTest extends \Codeception\Test\Unit
 
     public function testLoginWrongPassword()
     {
-        $this->model = new LoginForm([
-            'username' => 'demo',
+        $this->model = new UserLoginForm([
+            'login'    => 'demo',
             'password' => 'wrong_password',
         ]);
 
@@ -39,8 +42,8 @@ class LoginFormTest extends \Codeception\Test\Unit
 
     public function testLoginCorrect()
     {
-        $this->model = new LoginForm([
-            'username' => 'demo',
+        $this->model = new UserLoginForm([
+            'login'    => 'demo',
             'password' => 'demo',
         ]);
 

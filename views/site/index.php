@@ -1,53 +1,91 @@
 <?php
 
-/* @var $this yii\web\View */
+/**
+ * @var View       $this
+ * @var News[]     $newsList   - список новостей
+ * @var NewsFilter $newsFilter - фильтр новостей
+ */
 
-$this->title = 'My Yii Application';
+use app\components\mvc\view\View;
+use app\modules\news\models\filter\NewsFilter;
+use app\modules\news\models\News;
+use app\modules\news\NewsModule;
+use yii\helpers\Html;
+use yii\widgets\LinkPager;
+
+$this->title = 'Новостной сайт';
+
+$formConfig = [
+    'id'     => 'news-list-site-form',
+    'method' => "GET",
+    'action' => createUrl('/'),
+];
 ?>
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
+        <h1>Новости</h1>
+    </div>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+    <!-- фильтр новостей -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <?php $form = \yii\widgets\ActiveForm::begin($formConfig) ?>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+                <div class="col-xs-3">
+                    <?= $form->field($newsFilter, 'pageSize')->input('text') ?>
+                </div>
+
+                <div class="col-xs-3">
+                    <?= Html::submitButton('изменить кол-во новостей', ['class' => 'btn']) ?>
+                </div>
+
+                <?php $form->end() ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- пагинация -->
+
+    <div class="panel">
+        <div class="col m6">
+            <div class="pagination-total">
+                Всего новостей: <?= $newsFilter->pagination->totalCount ?>
+            </div>
+        </div>
+        <div class="col m6">
+            <div class="pagination-links">
+                <?= LinkPager::widget(['pagination' => $newsFilter->pagination]); ?>
+            </div>
+        </div>
     </div>
 
     <div class="body-content">
+        <?php if ($newsList): ?>
+            <?php foreach ($newsList as $news): ?>
+                <div class="panel panel-default">
+                    <div class="row panel-body">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                        <!-- картинка -->
+                        <div class="col-xs-2">
+                            <?= Html::a(Html::img($news->pictureFile, ['width' => '150px']), createUrl([createUrl(NewsModule::NEWS_VIEW), 'newsId' => $news->id])) ?>
+                        </div>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                        <!-- название -->
+                        <div class="col-xs-2">
+                            <?= Html::a(Html::encode($news->name), createUrl([createUrl(NewsModule::NEWS_VIEW), 'newsId' => $news->id])) ?>
+                        </div>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
+                        <!-- описание -->
+                        <div class="col-xs-8 description">
+                            <?= Html::encode($news->description) ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Новостей нет.</p>
+        <?php endif; ?>
     </div>
 </div>

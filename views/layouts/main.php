@@ -1,14 +1,17 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
+/**
+ * @var $this    \yii\web\View
+ * @var $content string
+ */
 
+use app\rbac\Permissions;
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
+use app\components\AppAsset;
 
 AppAsset::register($this);
 ?>
@@ -29,25 +32,31 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
+        'brandLabel' => 'Новостной сайт',
+        'brandUrl'   => Yii::$app->homeUrl,
+        'options'    => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+        'items'   => [
+            ['label' => 'Home', 'url' => ['/']],
+            Yii::$app->user->can(Permissions::NEWS_MANAGE) ? (
+            ['label' => 'crud новостей', 'url' => ['/news/list']]
+            ) : (''),Yii::$app->user->can(Permissions::USER_MANAGE) ? (
+            ['label' => 'crud пользователей', 'url' => ['/user/list']]
+            ) : (''),
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+            ['label' => 'Register', 'url' => ['/register']]
+            ) : (''),
+            Yii::$app->user->isGuest ? (
+            ['label' => 'Login', 'url' => ['/login']]
             ) : (
                 '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
+                . Html::beginForm(['/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Logout (' . app()->user->identity->login . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
@@ -69,9 +78,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left">&copy; Новостной сайт <?= date('Y') ?></p>
     </div>
 </footer>
 

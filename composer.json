@@ -17,7 +17,11 @@
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.5",
         "yiisoft/yii2-bootstrap": "~2.0.0",
-        "yiisoft/yii2-swiftmailer": "~2.0.0"
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
+
+        "kint-php/kint": "^2.0",
+        "twisted1919/yii2-shortcut-functions": "dev-master",
+        "vlucas/phpdotenv": "^2.4@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
