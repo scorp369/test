@@ -13,9 +13,9 @@ const YII_ENV_DEV = 1;
 $dotenv = new \Dotenv\Dotenv(__DIR__ . '/../' . '/');
 $dotenv->load();
 
+$config = require(__DIR__ . '/../config/web.php');
+
 // подключить свои shortcut`ы
 require(__DIR__ . '/../libs/shortcuts.php');
-
-$config = require(__DIR__ . '/../config/web.php');
 
 (new yii\web\Application($config))->run();

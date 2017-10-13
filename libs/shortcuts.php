@@ -3,24 +3,30 @@
 /**
  * @return string
  */
-function createUrl($params)
-{
-    return Yii::$app->get('urlManager')->createUrl($params);
+if (!function_exists('createUrl')) {
+    function createUrl($params)
+    {
+        return Yii::$app->get('urlManager')->createUrl($params);
+    }
 }
 
 /**
  * @return string
  */
-function createAbsoluteUrl($params, $scheme = null)
-{
-    return Yii::$app->get('urlManager')->createAbsoluteUrl($params, $scheme);
+if (!function_exists('createUrl')) {
+    function createAbsoluteUrl($params, $scheme = null)
+    {
+        return Yii::$app->get('urlManager')->createAbsoluteUrl($params, $scheme);
+    }
 }
 
 /**
  * дамп
  */
-function ddd($dump)
-{
-    d($dump);
-    die();
+if (!function_exists('createUrl')) {
+    function ddd($dump)
+    {
+        d($dump);
+        die();
+    }
 }
